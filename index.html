@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipes App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="mobile-container">
+    <header>
+      <input type="text">
+      <button id="search"><i class="fas fa-search"></i></button>
+    </header>
+
+    <div class="fav-container">
+      <h3>Favorite Meals</h3>
+      <ul class="fav-meals">
+        <li><img src="https://www.themealdb.com/images/ingredients/Lime.png" alt=""><span>Lime</span></li>
+        <li><img src="https://themealdb.com/images/media/meals/llcbn01574260722.jpg/preview" alt=""><span>Carbonara</span></li>
+        <li><img src="https://www.themealdb.com/images/media/meals/vptwyt1511450962.jpg" alt=""><span>Lasagna</span></li>
+        <li><img src="https://www.themealdb.com/images/media//meals/qysyss1511558054.jpg" alt=""><span>VeggiePie</span></li>
+      </ul>
+    </div>
+
+    <!-- Random Recipe -->
+    <div class="meals" id="meals"></div>
+  </div>
+</body>
+</html>
