@@ -140,6 +140,6 @@ header button {
   font-size: 1.2rem;
 }
 
-.meal-body .fav-btn:active {
-  color: rebeccapurple;
+.meal-body .fav-btn.active {
+  color: rgb(194, 37, 37);
 }

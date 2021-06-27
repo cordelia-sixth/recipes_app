@@ -1,7 +1,10 @@
 // Random Recipe
 const mealsElm = document.getElementById('meals');
+// お気に入りレシピ
+const favoriteContainer = document.getElementById('fav-meals');
 
 getRandomMeal();
+fetchFavMeals();
 
 // ランダムな料理のデータを1つ取得する
 async function getRandomMeal() {
@@ -14,9 +17,19 @@ async function getRandomMeal() {
   addMeal(randomMeal, true);
 }
 
-// idから料理を検索
+// idからレシピ情報をフェッチ
 async function getMealById(id) {
-  const meal = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+  const resp = await fetch(
+    `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
+  );
+  console.log('resp', resp);
+
+  // JSONに変換
+  const respData = await resp.json();
+  console.log('respDatta', respData);
+
+  const meal = respData.meals[0];
+  return meal;
 }
 
 // 料理名で検索
@@ -34,7 +47,7 @@ function addMeal(mealData, random = false) {
     <div class="meal-header">
       ${random ? `
       <span class="random">
-        Recipe
+        Today's Recipe
       </span>` : ''}
       <img src="${mealData.strMealThumb}" alt="${mealData.strMeal}">
     </div>
@@ -46,11 +59,89 @@ function addMeal(mealData, random = false) {
     </div>
   `;
 
-  const btn = meal.querySelector('.meal-body .fav-btn');
+  const btn = meal.querySelector('.fav-btn');
 
+  //  お気に入りとして保存する
   btn.addEventListener('click', event => {
-    btn.classList.toggle('active');
+
+    // お気に入り解除
+    if (btn.classList.contains('active')) {
+      removeMeal(mealData.idMeal);
+      btn.classList.remove('active');
+    } else {
+      addMealToLS(mealData.idMeal);
+      btn.classList.add('active');
+    }
+
+    fetchFavMeals();
   });
 
   mealsElm.appendChild(meal);
+}
+
+// レシピをお気に入りとしてローカルストレージに保存する
+function addMealToLS(mealID) {
+  // 保存してあるレシピを取得する
+  // 
+  const mealIds = getMeals();
+  console.log(mealIds);
+
+  // NOTE
+  localStorage.setItem('mealIds', JSON.stringify([...mealIds, mealID]));
+}
+
+// レシピをローカルストレージから削除する
+function removeMeal(mealId) {
+  // ローカルストレージからデータを取得
+  const mealIds = getMeals();
+
+  // 削除したいレシピIDを取り除く
+  const newMealIds = mealIds.filter(id => id !== mealId);
+  console.log(newMealIds);
+
+  // ローカルストレージにデータを戻す
+  localStorage.setItem('mealIds', JSON.stringify(newMealIds));
+}
+
+// お気に入りレシピをローカルストレージから取得する
+function getMeals() {
+  // レシピをjsonに変換する
+  const mealIds = JSON.parse(localStorage.getItem('mealIds'));
+  
+  // ローカルストレージに何もなかった場合は空の配列を返す
+  return mealIds === null ? [] : mealIds;
+}
+
+// お気に入りの料理レシピをAPIからフェッチ
+async function fetchFavMeals() {
+
+  // ローカルストレージからお気に入りレシピのIDを取得
+  const mealIds = getMeals();
+
+  for(let i = 0; i < mealIds.length; i++) {
+    // レシピID
+    const mealId = mealIds[i];
+
+    // IDを元にレシピ情報をフェッチ
+    const meal = await getMealById(mealId);
+
+    // お気に入りレシピとして表示
+    addMealFav(meal);
+  }
+}
+
+// お気に入りレシピを画面に表示
+function addMealFav(mealData) {
+  const favMeal = document.createElement('li');
+
+  // 追加する要素を作成
+  favMeal.innerHTML = `
+    <img
+      src="${mealData.strMealThumb}"
+      alt="${mealData.strMeal}"
+    />
+    <span>${mealData.strMeal}</span>
+  `;
+
+  favoriteContainer.appendChild(favMeal);
 }
