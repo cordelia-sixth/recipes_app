@@ -108,7 +108,22 @@ header button {
 }
 
 .fav-meals li span {
+  /* ボックス要素に変更 */
+  display: inline-block;
+
   font-size: 0.9rem;
+
+  /* 文字列をボックス一直線にする */
+  white-space: nowrap;
+
+  /* ボックスからはみ出した文字を表示しないようにする */
+  overflow: hidden;
+
+  /* ボックス内に収まらない文字を点々で表示する */
+  text-overflow: ellipsis;
+
+  /* ボックスの幅を固定することが大事 */
+  width: 75px;
 }
 
 .meal {
