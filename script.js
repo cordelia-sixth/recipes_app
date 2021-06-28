@@ -155,7 +155,7 @@ function addMealFav(mealData) {
     />
     <span>${mealData.strMeal}</span>
     <button class="clear">
-      <i class="far fa-times-circle"></i>
+      <i class="fas fa-times-circle"></i>
     </button>
   `;
 
