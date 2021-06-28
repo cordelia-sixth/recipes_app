@@ -154,7 +154,17 @@ function addMealFav(mealData) {
       alt="${mealData.strMeal}"
     />
     <span>${mealData.strMeal}</span>
+    <button class="clear">
+      <i class="far fa-times-circle"></i>
+    </button>
   `;
+
+  // 削除ボタン
+  const clearBtn = favMeal.querySelector('.clear');
+  clearBtn.addEventListener('click', () => {
+    removeMeal(mealData.idMeal);
+    removeMealElm(mealData.idMeal);
+  });
 
   favoriteContainer.appendChild(favMeal);
 }
