@@ -67,7 +67,9 @@ function addMeal(mealData, random = false) {
     // お気に入り解除
     if (btn.classList.contains('active')) {
       removeMeal(mealData.idMeal);
+      removeMealElm(mealData.idMeal);
       btn.classList.remove('active');
+
     } else {
       addMealToLS(mealData.idMeal);
       btn.classList.add('active');
@@ -103,6 +105,11 @@ function removeMeal(mealId) {
   localStorage.setItem('mealIds', JSON.stringify(newMealIds));
 }
 
+// レシピを画面から削除する
+function removeMealElm(mealId) {
+  document.getElementById(mealId).remove();
+}
+
 // お気に入りレシピをローカルストレージから取得する
 function getMeals() {
   // レシピをjsonに変換する
@@ -112,7 +119,7 @@ function getMeals() {
   return mealIds === null ? [] : mealIds;
 }
 
-// お気に入りの料理レシピをAPIからフェッチ
+// お気に入りの料理レシピをAPIサーバーからフェッチ
 async function fetchFavMeals() {
 
   // ローカルストレージからお気に入りレシピのIDを取得
@@ -122,17 +129,23 @@ async function fetchFavMeals() {
     // レシピID
     const mealId = mealIds[i];
 
-    // IDを元にレシピ情報をフェッチ
-    const meal = await getMealById(mealId);
+    // すでに画面に表示されているかチェック
+    if (document.getElementById(mealId) === null) {
+      // IDを元にレシピ情報をフェッチ
+      const meal = await getMealById(mealId);
 
-    // お気に入りレシピとして表示
-    addMealFav(meal);
+      // お気に入りレシピとして表示
+      addMealFav(meal);
+    }
   }
 }
 
 // お気に入りレシピを画面に表示
 function addMealFav(mealData) {
   const favMeal = document.createElement('li');
+
+  // 料理idを要素idとして付ける
+  favMeal.id = mealData.idMeal;
 
   // 追加する要素を作成
   favMeal.innerHTML = `
