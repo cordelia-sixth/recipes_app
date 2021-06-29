@@ -10,15 +10,18 @@
 </head>
 <body>
   <div class="mobile-container">
-    <header>
-      <input type="text">
-      <button id="search"><i class="fas fa-search"></i></button>
-    </header>
-
-    <div class="fav-container">
-      <h3>Favorite Meals</h3>
-      <ul class="fav-meals" id="fav-meals"></ul>
+    <div class="header-container">
+      <header>
+        <input type="text" id="search-term" placeholder="search meal name" />
+        <button id="search"><i class="fas fa-search"></i></button>
+      </header>
+  
+      <div class="fav-container">
+        <h3>Favorite Meals</h3>
+        <ul class="fav-meals" id="fav-meals"></ul>
+      </div>
     </div>
+    
 
     <!-- Random Recipe -->
     <div class="meals" id="meals"></div>
