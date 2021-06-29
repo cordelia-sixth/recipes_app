@@ -1,7 +1,10 @@
-// Random Recipe
+// ランダムレシピの表示領域
 const mealsElm = document.getElementById('meals');
-// お気に入りレシピ
+// お気に入りレシピの表示領域
 const favoriteContainer = document.getElementById('fav-meals');
+// 検索窓と検索ボタン
+const searchTerm = document.getElementById('search-term');
+const searchBtn = document.getElementById('search');
 
 getRandomMeal();
 fetchFavMeals();
@@ -11,8 +14,6 @@ async function getRandomMeal() {
   const resp = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
   const respData = await resp.json();
   const randomMeal = respData.meals[0]
-
-  console.log(randomMeal);
   
   addMeal(randomMeal, true);
 }
@@ -22,19 +23,28 @@ async function getMealById(id) {
   const resp = await fetch(
     `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
   );
-  console.log('resp', resp);
 
   // JSONに変換
   const respData = await resp.json();
-  console.log('respDatta', respData);
 
   const meal = respData.meals[0];
+
   return meal;
 }
 
 // 料理名で検索
 async function getMealsBySearch(term) {
-  const meals = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${term}`);
+
+  // Search meal by name
+  // 部分一致でもok
+  const resp = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${term}`);
+
+  // 取得したデータをJSONに変換
+  const respData = await resp.json();
+  const meals = respData.meals;
+
+  console.log(meals);
+  return meals;
 }
 
 // 料理コンテナを作成する
@@ -168,3 +178,23 @@ function addMealFav(mealData) {
 
   favoriteContainer.appendChild(favMeal);
 }
+
+// 検索
+searchBtn.addEventListener('click', async () => {
+
+  // 検索フォームの入力値
+  const search = searchTerm.value;
+
+  if(search) {
+    const meals = await getMealsBySearch(search);
+
+    if(meals) {
+      // 表示をクリア
+      mealsElm.innerHTML = '';
+      
+      meals.forEach(meal => {
+        addMeal(meal);
+      });  
+    }
+  }
+});
