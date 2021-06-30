@@ -1,10 +1,17 @@
 // ランダムレシピの表示領域
 const mealsElm = document.getElementById('meals');
+
 // お気に入りレシピの表示領域
 const favoriteContainer = document.getElementById('fav-meals');
+
 // 検索窓と検索ボタン
 const searchTerm = document.getElementById('search-term');
 const searchBtn = document.getElementById('search');
+
+// レシピポップアップ
+const mealPopup = document.getElementById('meal-popup');
+const mealInfoElm = document.getElementById('meal-info');
+const closePopupBtn = document.getElementById('close-popup');
 
 getRandomMeal();
 fetchFavMeals();
@@ -15,6 +22,7 @@ async function getRandomMeal() {
   const respData = await resp.json();
   const randomMeal = respData.meals[0]
   
+  console.log(randomMeal);
   addMeal(randomMeal, true);
 }
 
@@ -73,6 +81,7 @@ function addMeal(mealData, random = false) {
 
   //  お気に入りとして保存する
   btn.addEventListener('click', event => {
+    event.stopPropagation();
 
     // お気に入り解除
     if (btn.classList.contains('active')) {
@@ -88,15 +97,18 @@ function addMeal(mealData, random = false) {
     fetchFavMeals();
   });
 
+  // レシピ詳細を表示するイベント
+  meal.addEventListener('click', () => {
+    showMealInfo(mealData);
+  });
+
   mealsElm.appendChild(meal);
 }
 
 // レシピをお気に入りとしてローカルストレージに保存する
 function addMealToLS(mealID) {
   // 保存してあるレシピを取得する
-  // 
   const mealIds = getMeals();
-  console.log(mealIds);
 
   // NOTE
   localStorage.setItem('mealIds', JSON.stringify([...mealIds, mealID]));
@@ -171,12 +183,54 @@ function addMealFav(mealData) {
 
   // 削除ボタン
   const clearBtn = favMeal.querySelector('.clear');
-  clearBtn.addEventListener('click', () => {
+  clearBtn.addEventListener('click', event => {
+    event.stopPropagation();
+
     removeMeal(mealData.idMeal);
     removeMealElm(mealData.idMeal);
   });
 
+  // レシピ情報ポップアップ
+  favMeal.addEventListener('click', () =>{
+    showMealInfo(mealData);
+  });
+
   favoriteContainer.appendChild(favMeal);
+}
+
+// レシピ詳細をポップアップ表示
+function showMealInfo(mealData) {
+  // ポップアップ要素に挿入する要素
+  const mealEl = document.createElement('div');
+
+  // 材料と量を取得
+  const ingredients = [];
+  for(let i = 1; i <= 20; i++) {
+    if(mealData[`strIngredient${i}`]) {
+      ingredients.push(`${mealData[`strIngredient${i}`]} - ${mealData[`strMeasure${i}`]}`);
+    } else {
+      break;
+    }
+  }
+
+  mealEl.innerHTML = `
+    <h1>${mealData.strMeal}</h1>
+    <img
+      src="${mealData.strMealThumb}"
+      alt="${mealData.strMeal}"
+    />
+    <p>
+      ${mealData.strInstructions}
+    </p>
+    <h3>Ingredients:</h3>
+    <ul>
+      ${ingredients.map(ing => `<li>${ing}</li>`).join('')}
+    </ul>
+    `;
+    
+  mealInfoElm.appendChild(mealEl);
+
+  mealPopup.classList.remove('hidden');
 }
 
 // 検索
@@ -197,4 +251,12 @@ searchBtn.addEventListener('click', async () => {
       });  
     }
   }
+});
+
+// ポップアップクローズボタン
+closePopupBtn.addEventListener('click', () => {
+  // clean popup
+  mealInfoElm.innerHTML = '';
+
+  mealPopup.classList.add('hidden');
 });

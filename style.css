@@ -77,6 +77,7 @@ header button {
 }
 
 .fav-meals li {
+  cursor: pointer;
   position: relative;
   margin: 5px;
   width: 75px;
@@ -133,6 +134,7 @@ header button {
   box-shadow: 0 0 10px 2px #3333331a;
   margin: 1.5rem;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .meal-header {
@@ -175,4 +177,58 @@ header button {
 
 .meal-body .fav-btn.active {
   color: rgb(194, 37, 37);
+}
+
+/* Meal info */
+.popup-container {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+
+  /* 中のコンテンツを中央揃え */
+  align-items: center;
+  justify-content: center;
+
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.popup-container.hidden {
+  opacity: 0;
+
+  /* クリックイベントをキャンセル */
+  pointer-events: none;
+}
+
+.popup {
+  background-color: white;
+  border-radius: 5px;
+  padding: 1.4rem 2.4rem;
+  position: relative;
+  overflow: auto;
+  max-height: 100vh;
+  max-width: 600px;
+  width: 100%;  
+}
+
+.popup .close-popup {
+  position: absolute;
+  background-color: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: none;
+  top: 1.9rem;
+  right: 2.6rem;
+}
+
+.meal-info h1 {
+  text-align: center;
+  margin-top: 0;
+}
+
+.meal-info img {
+  border-radius: 5px;
+  max-width: 100%;
 }
