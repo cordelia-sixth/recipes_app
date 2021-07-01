@@ -47,6 +47,7 @@ header input {
   border-radius: 3px;
   font-family: inherit;
   padding: 0.5rem 1rem;
+  outline: none;
 }
 
 header button {
@@ -55,6 +56,7 @@ header button {
   color: rgb(138, 129, 141);
   font-size: 1.5rem;
   margin-left: 2px;
+  cursor: pointer;
 }
 
 .fav-container {
@@ -75,8 +77,25 @@ header button {
 }
 
 .fav-meals li {
+  cursor: pointer;
+  position: relative;
   margin: 5px;
   width: 75px;
+}
+
+.fav-meals li .clear {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  position: absolute;
+  top: -0.3rem;
+  right: -0.3rem;
+  font-size: 1.2rem;
+}
+
+.fav-meals li:hover .clear {
+  opacity: 1;
 }
 
 .fav-meals li img {
@@ -92,7 +111,22 @@ header button {
 }
 
 .fav-meals li span {
+  /* ボックス要素に変更 */
+  display: inline-block;
+
   font-size: 0.9rem;
+
+  /* 文字列をボックス一直線にする */
+  white-space: nowrap;
+
+  /* ボックスからはみ出した文字を表示しないようにする */
+  overflow: hidden;
+
+  /* ボックス内に収まらない文字を点々で表示する */
+  text-overflow: ellipsis;
+
+  /* ボックスの幅を固定することが大事 */
+  width: 75px;
 }
 
 .meal {
@@ -100,6 +134,7 @@ header button {
   box-shadow: 0 0 10px 2px #3333331a;
   margin: 1.5rem;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .meal-header {
@@ -140,6 +175,60 @@ header button {
   font-size: 1.2rem;
 }
 
-.meal-body .fav-btn:active {
-  color: rebeccapurple;
+.meal-body .fav-btn.active {
+  color: rgb(194, 37, 37);
+}
+
+/* Meal info */
+.popup-container {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+
+  /* 中のコンテンツを中央揃え */
+  align-items: center;
+  justify-content: center;
+
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.popup-container.hidden {
+  opacity: 0;
+
+  /* クリックイベントをキャンセル */
+  pointer-events: none;
+}
+
+.popup {
+  background-color: white;
+  border-radius: 5px;
+  padding: 1.4rem 2.4rem;
+  position: relative;
+  overflow: auto;
+  max-height: 100vh;
+  max-width: 600px;
+  width: 100%;  
+}
+
+.popup .close-popup {
+  position: absolute;
+  background-color: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: none;
+  top: 1.9rem;
+  right: 2.6rem;
+}
+
+.meal-info h1 {
+  text-align: center;
+  margin-top: 0;
+}
+
+.meal-info img {
+  border-radius: 5px;
+  max-width: 100%;
 }
